@@ -2,16 +2,67 @@ const core = require("@actions/core");
 const fs = require("fs").promises;
 const path = require("path");
 const { Dropbox } = require("dropbox");
-const StreamZip = require("node-stream-zip");
+const yauzl = require("yauzl");
 
-const extractZip = (zip, destinationDir) => {
+const extractZip = (zipData, destinationDir) => {
   return new Promise((resolve, reject) => {
-    zip.extract(null, destinationDir, (err, count) => {
+    // Create a temporary file path to write the zip data
+    const tempFilePath = path.join(destinationDir, "temp.zip");
+
+    // Write the zip data to the temporary file
+    fs.writeFile(tempFilePath, zipData, (err) => {
       if (err) {
         reject(err);
-      } else {
-        resolve(count);
+        return;
       }
+
+      // Open the temporary file with yauzl
+      yauzl.open(tempFilePath, { lazyEntries: true }, (err, zipfile) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        // Ensure the destination directory exists
+        if (!fs.existsSync(destinationDir)) {
+          fs.mkdirSync(destinationDir, { recursive: true });
+        }
+
+        // Extract each entry in the zip file
+        zipfile.readEntry();
+        zipfile.on("entry", (entry) => {
+          if (/\/$/.test(entry.fileName)) {
+            // Directory entry, create the directory
+            fs.mkdirSync(path.join(destinationDir, entry.fileName), {
+              recursive: true,
+            });
+            zipfile.readEntry();
+          } else {
+            // File entry, extract the file
+            zipfile.openReadStream(entry, (err, readStream) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+
+              const writeStream = fs.createWriteStream(
+                path.join(destinationDir, entry.fileName)
+              );
+              readStream.pipe(writeStream);
+              writeStream.on("close", () => {
+                zipfile.readEntry();
+              });
+            });
+          }
+        });
+
+        // Close the zip file once all entries are extracted
+        zipfile.on("end", () => {
+          zipfile.close();
+          fs.unlinkSync(tempFilePath); // Remove the temporary zip file
+          resolve();
+        });
+      });
     });
   });
 };
@@ -24,19 +75,12 @@ async function run() {
     const destPath = core.getInput("dest-path");
 
     const dbx = new Dropbox({ accessToken });
-    data = await dbx.filesDownloadZip({ path: sourcePath });
+    let { result } = await dbx.filesDownloadZip({ path: sourcePath });
 
     await fs.mkdir(destPath, { recursive: true });
     // unzip the data into destPath
-    const zip = new StreamZip({
-      file: data.result.fileBinary,
-      storeEntries: true, // This option will store the entries in memory for faster access
-    });
-
-    // const count = await extractZip(zip, destPath);
-    // console.log(`Extracted ${count} entries to ${destPath}`);
-
-    // console.log(`File: ${data.result.name} saved.`);
+    await extractZip(result.fileBinary, destPath);
+    console.log(`${result.name} saved.`);
   } catch (error) {
     core.setFailed(error.message);
   }
