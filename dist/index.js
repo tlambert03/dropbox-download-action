@@ -11977,11 +11977,11 @@ const { Dropbox } = __nccwpck_require__(8939);
 async function run() {
   try {
     const accessToken = core.getInput("dropbox-token");
-    const path = core.getInput("source-path");
+    const sourcePath = core.getInput("source-path");
     const destPath = core.getInput("dest-path");
 
     const dbx = new Dropbox({ accessToken });
-    data = await dbx.filesDownload({ path });
+    data = await dbx.filesDownload({ path: sourcePath });
     
     await fs.mkdir(destPath, { recursive: true });
     await fs.writeFile(
