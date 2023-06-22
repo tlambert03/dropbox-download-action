@@ -1,5 +1,6 @@
 const core = require("@actions/core");
 const fs = require("fs").promises;
+const { Dropbox } = require("dropbox");
 
 // most @actions toolkit packages have async methods
 async function run() {
