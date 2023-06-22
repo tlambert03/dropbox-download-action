@@ -22,4 +22,5 @@ jobs:
     - uses: actions/checkout@v3
     - uses: ./
       with:
-        milliseconds: 1000
+        dropbox-token: ${{ secrets.DROPBOX_TOKEN }}
+        source-path: "/nd2_test_data/1_noadd_020.nd2"
