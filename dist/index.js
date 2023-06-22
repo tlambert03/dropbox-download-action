@@ -11970,6 +11970,7 @@ var __webpack_exports__ = {};
 (() => {
 const core = __nccwpck_require__(2186);
 const fs = (__nccwpck_require__(7147).promises);
+const path = __nccwpck_require__(1017);
 const { Dropbox } = __nccwpck_require__(8939);
 
 // most @actions toolkit packages have async methods
@@ -11981,10 +11982,10 @@ async function run() {
 
     const dbx = new Dropbox({ accessToken });
     data = await dbx.filesDownload({ path });
-
+    
     await fs.mkdir(destPath, { recursive: true });
     await fs.writeFile(
-      destPath + data.result.name,
+      path.join(destPath, data.result.name),
       data.result.fileBinary,
       "binary"
     );
