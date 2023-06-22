@@ -13213,12 +13213,12 @@ async function run() {
     const dbx = new Dropbox({ accessToken });
     data = await dbx.filesDownloadZip({ path: sourcePath });
 
-    // await fs.mkdir(destPath, { recursive: true });
-    // // unzip the data into destPath
-    // const zip = new StreamZip({
-    //   file: data.result.fileBinary,
-    //   storeEntries: true, // This option will store the entries in memory for faster access
-    // });
+    await fs.mkdir(destPath, { recursive: true });
+    // unzip the data into destPath
+    const zip = new StreamZip({
+      file: data.result.fileBinary,
+      storeEntries: true, // This option will store the entries in memory for faster access
+    });
 
     // const count = await extractZip(zip, destPath);
     // console.log(`Extracted ${count} entries to ${destPath}`);
