@@ -9,7 +9,6 @@ async function run() {
     const localTarget = core.getInput("dest-path");
 
     dropboxDownload(dbxPath, localTarget, accessToken);
-    console.log(`File: ${data.result.name} saved.`);
   } catch (error) {
     core.setFailed(error.message);
   }

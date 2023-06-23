@@ -14872,6 +14872,12 @@ let dropboxDownload = function (dropboxDirectory, localTarget, accessToken) {
             `${destinationPath}/${slug}`
           );
         });
+        console.log(
+          `Successfully downloaded ${dropboxDirectory} to ${destinationPath}`
+        );
+      })
+      .catch((err) => {
+        console.error(err);
       })
       .finally(() => {
         // delete temporary folders
@@ -15090,7 +15096,6 @@ async function run() {
     const localTarget = core.getInput("dest-path");
 
     dropboxDownload(dbxPath, localTarget, accessToken);
-    console.log(`File: ${data.result.name} saved.`);
   } catch (error) {
     core.setFailed(error.message);
   }

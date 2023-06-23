@@ -31,6 +31,12 @@ let dropboxDownload = function (dropboxDirectory, localTarget, accessToken) {
             `${destinationPath}/${slug}`
           );
         });
+        console.log(
+          `Successfully downloaded ${dropboxDirectory} to ${destinationPath}`
+        );
+      })
+      .catch((err) => {
+        console.error(err);
       })
       .finally(() => {
         // delete temporary folders
