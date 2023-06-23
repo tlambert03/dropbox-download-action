@@ -8,6 +8,7 @@
     "lint": "eslint .",
     "test": "jest --coverage",
     "format": "prettier --no-error-on-unmatched-pattern  --write \"**/*.{js,yml,yaml}\"",
+    "format-check": "prettier --no-error-on-unmatched-pattern --check \"**/*.{js,yml,yaml}\"",
     "all": "npm run lint && npm run build && npm run test",
     "release": "npm run build && git add -f dist/"
   },
