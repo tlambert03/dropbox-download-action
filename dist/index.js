@@ -14851,11 +14851,7 @@ const extract = __nccwpck_require__(460);
  * @param {string} accessToken - The Dropbox access token.
  * @returns {Promise<void>}
  */
-const dropboxDownload = async function (
-  dropboxDirectory,
-  localTarget,
-  accessToken
-) {
+const dropboxDownload = async function (dropboxDirectory, localTarget, accessToken) {
   const dbx = new Dropbox.Dropbox({ accessToken });
 
   const destPath = path.resolve(`${localTarget}`);
