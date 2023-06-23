@@ -14847,23 +14847,31 @@ const extract = __nccwpck_require__(460);
 let dropboxDownload = function (dropboxDirectory, localTarget, accessToken) {
   const dbx = new Dropbox.Dropbox({ accessToken });
 
-  const destinationPath = path.resolve(`./${localTarget}`);
-  dbx.filesDownloadZip({ path: dropboxDirectory }).then((response) => {
-    const zipFolderPath = path.resolve(`./${response.result.metadata.name}`);
-    const zipFilePath = zipFolderPath + ".zip";
+  const workingDirectory = process.cwd();
+  const destinationPath = path.resolve(`${localTarget}`);
+  console.log(workingDirectory);
+  console.log(destinationPath);
 
+  dbx.filesDownloadZip({ path: dropboxDirectory }).then((response) => {
+    const zipFolderPath = path.join(
+      destinationPath,
+      `${response.result.metadata.name}`
+    );
+    const zipFilePath = zipFolderPath + ".zip";
+    console.log(zipFolderPath);
+    console.log(zipFilePath);
+
+    // create destination folder if doesn't exist
+    if (!fs.existsSync(destinationPath)) {
+      fs.mkdirSync(destinationPath, { recursive: true });
+    }
     // write zip file to filesystem
     const buffer = Buffer.from(response.result.fileBinary, "binary");
     fs.writeFileSync(zipFilePath, buffer);
 
     // extract zip file
-    extract(zipFilePath, { dir: __dirname })
+    extract(zipFilePath, { dir: destinationPath })
       .then(() => {
-        // create destination folder if not exists
-        if (!fs.existsSync(destinationPath)) {
-          fs.mkdirSync(destinationPath, { recursive: true });
-        }
-
         // copy each exatracted file to destination
         fs.readdirSync(zipFolderPath).forEach((file) => {
           const slug = file.replace(/\s+/g, "-").toLowerCase();
