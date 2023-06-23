@@ -14837,50 +14837,52 @@ function defaultCallback(err) {
 /***/ }),
 
 /***/ 4855:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const fs = __nccwpck_require__(7147);
 const path = __nccwpck_require__(1017);
 const Dropbox = __nccwpck_require__(8939);
 const extract = __nccwpck_require__(460);
 
-function dropboxDownload(dropboxDirectory, localTarget, accessToken) {
-    const dbx = new Dropbox.Dropbox({ accessToken });
-  
-    const destinationPath = path.resolve(`./${localTarget}`);
-    dbx.filesDownloadZip({ path: dropboxDirectory }).then((response) => {
-      const zipFolderPath = path.resolve(`./${response.result.metadata.name}`);
-      const zipFilePath = zipFolderPath + ".zip";
-  
-      // write zip file to filesystem
-      const buffer = Buffer.from(response.result.fileBinary, "binary");
-      fs.writeFileSync(zipFilePath, buffer);
-  
-      // extract zip file
-      extract(zipFilePath, { dir: __dirname })
-        .then(() => {
-  
-          // create destination folder if not exists
-          if (!fs.existsSync(destinationPath)) {
-            fs.mkdirSync(destinationPath, { recursive: true });
-          }
-  
-          // copy each exatracted file to destination
-          fs.readdirSync(zipFolderPath).forEach((file) => {
-            const slug = file.replace(/\s+/g, "-").toLowerCase();
-            fs.copyFileSync(
-              `${zipFolderPath}/${file}`,
-              `${destinationPath}/${slug}`
-            );
-          });
-        })
-        .finally(() => {
-          // delete temporary folders
-          fs.rmSync(zipFilePath);
-          fs.rmSync(zipFolderPath, { recursive: true, force: true });
+const dropboxDownload = function (dropboxDirectory, localTarget, accessToken) {
+  const dbx = new Dropbox.Dropbox({ accessToken });
+
+  const destinationPath = path.resolve(`./${localTarget}`);
+  dbx.filesDownloadZip({ path: dropboxDirectory }).then((response) => {
+    const zipFolderPath = path.resolve(`./${response.result.metadata.name}`);
+    const zipFilePath = zipFolderPath + ".zip";
+
+    // write zip file to filesystem
+    const buffer = Buffer.from(response.result.fileBinary, "binary");
+    fs.writeFileSync(zipFilePath, buffer);
+
+    // extract zip file
+    extract(zipFilePath, { dir: __dirname })
+      .then(() => {
+        // create destination folder if not exists
+        if (!fs.existsSync(destinationPath)) {
+          fs.mkdirSync(destinationPath, { recursive: true });
+        }
+
+        // copy each exatracted file to destination
+        fs.readdirSync(zipFolderPath).forEach((file) => {
+          const slug = file.replace(/\s+/g, "-").toLowerCase();
+          fs.copyFileSync(
+            `${zipFolderPath}/${file}`,
+            `${destinationPath}/${slug}`
+          );
         });
-    });
-  }
+      })
+      .finally(() => {
+        // delete temporary folders
+        fs.rmSync(zipFilePath);
+        fs.rmSync(zipFolderPath, { recursive: true, force: true });
+      });
+  });
+};
+
+module.exports = dropboxDownload;
+
 
 /***/ }),
 
