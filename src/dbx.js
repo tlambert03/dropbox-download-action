@@ -3,13 +3,17 @@ const path = require("path");
 const Dropbox = require("dropbox");
 const extract = require("extract-zip");
 
-let dropboxDownload = function (dropboxDirectory, localTarget, accessToken) {
+/**
+ * Downloads a folder from Dropbox and extracts it to a local directory.
+ * @param {string} dropboxDirectory - The path to the folder in Dropbox.
+ * @param {string} localTarget - The path to the local directory.
+ * @param {string} accessToken - The Dropbox access token.
+ * @returns {void}
+ */
+const dropboxDownload = function (dropboxDirectory, localTarget, accessToken) {
   const dbx = new Dropbox.Dropbox({ accessToken });
 
-  const workingDirectory = process.cwd();
   const destinationPath = path.resolve(`${localTarget}`);
-  console.log(workingDirectory);
-  console.log(destinationPath);
 
   dbx.filesDownloadZip({ path: dropboxDirectory }).then((response) => {
     const zipFolderPath = path.join(
@@ -17,8 +21,6 @@ let dropboxDownload = function (dropboxDirectory, localTarget, accessToken) {
       `${response.result.metadata.name}`
     );
     const zipFilePath = zipFolderPath + ".zip";
-    console.log(zipFolderPath);
-    console.log(zipFilePath);
 
     // create destination folder if doesn't exist
     if (!fs.existsSync(destinationPath)) {
@@ -39,12 +41,6 @@ let dropboxDownload = function (dropboxDirectory, localTarget, accessToken) {
             `${destinationPath}/${slug}`
           );
         });
-        console.log(
-          `Successfully downloaded ${dropboxDirectory} to ${destinationPath}`
-        );
-      })
-      .catch((err) => {
-        console.error(err);
       })
       .finally(() => {
         // delete temporary folders
