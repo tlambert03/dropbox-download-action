@@ -3,7 +3,7 @@ const path = require("path");
 const Dropbox = require("dropbox");
 const extract = require("extract-zip");
 
-const dropboxDownload = function (dropboxDirectory, localTarget, accessToken) {
+let dropboxDownload = function (dropboxDirectory, localTarget, accessToken) {
   const dbx = new Dropbox.Dropbox({ accessToken });
 
   const destinationPath = path.resolve(`./${localTarget}`);

@@ -14844,7 +14844,7 @@ const path = __nccwpck_require__(1017);
 const Dropbox = __nccwpck_require__(8939);
 const extract = __nccwpck_require__(460);
 
-const dropboxDownload = function (dropboxDirectory, localTarget, accessToken) {
+let dropboxDownload = function (dropboxDirectory, localTarget, accessToken) {
   const dbx = new Dropbox.Dropbox({ accessToken });
 
   const destinationPath = path.resolve(`./${localTarget}`);
@@ -15080,7 +15080,7 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(2186);
-const dbx = __nccwpck_require__(4855);
+const dropboxDownload = __nccwpck_require__(4855);
 
 // most @actions toolkit packages have async methods
 async function run() {
@@ -15089,7 +15089,7 @@ async function run() {
     const dbxPath = core.getInput("source-path");
     const localTarget = core.getInput("dest-path");
 
-    dbx.dropboxDownload(dbxPath, localTarget, accessToken);
+    dropboxDownload(dbxPath, localTarget, accessToken);
     console.log(`File: ${data.result.name} saved.`);
   } catch (error) {
     core.setFailed(error.message);

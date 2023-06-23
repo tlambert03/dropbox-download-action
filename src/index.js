@@ -1,5 +1,5 @@
 const core = require("@actions/core");
-const dbx = require("./dbx");
+const dropboxDownload = require("./dbx");
 
 // most @actions toolkit packages have async methods
 async function run() {
@@ -8,7 +8,7 @@ async function run() {
     const dbxPath = core.getInput("source-path");
     const localTarget = core.getInput("dest-path");
 
-    dbx.dropboxDownload(dbxPath, localTarget, accessToken);
+    dropboxDownload(dbxPath, localTarget, accessToken);
     console.log(`File: ${data.result.name} saved.`);
   } catch (error) {
     core.setFailed(error.message);
