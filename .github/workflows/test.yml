@@ -8,11 +8,21 @@ on:
 
 jobs:
   # unit tests
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci --ignore-scripts
+      - run: npm run format-check
+      - run: npm run lint
+      - run: npm run build
+      - run: npm audit --audit-level=high
+
   units:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: npm ci
+      - run: npm ci --ignore-scripts
       - run: npm test
         env:
           DROPBOX_TOKEN: ${{ secrets.DROPBOX_TOKEN }}
