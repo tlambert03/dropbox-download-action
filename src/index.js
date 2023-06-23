@@ -1,6 +1,4 @@
 const core = require("@actions/core");
-const wait = require("./wait");
-const fs = require("fs").promises;
 const dbx = require("./dbx");
 
 // most @actions toolkit packages have async methods

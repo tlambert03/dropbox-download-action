@@ -14884,14 +14884,6 @@ function dropboxDownload(dropboxDirectory, localTarget, accessToken) {
 
 /***/ }),
 
-/***/ 4653:
-/***/ ((module) => {
-
-module.exports = eval("require")("./wait");
-
-
-/***/ }),
-
 /***/ 2877:
 /***/ ((module) => {
 
@@ -15086,8 +15078,6 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(2186);
-const wait = __nccwpck_require__(4653);
-const fs = (__nccwpck_require__(7147).promises);
 const dbx = __nccwpck_require__(4855);
 
 // most @actions toolkit packages have async methods
