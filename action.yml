@@ -1,13 +1,18 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'Download Dropbox Folder'
+description: 'Download data from a dropbox folder'
+branding: 
+  icon: 'download'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  dropbox-token:
+    description: 'Dropbox Access Token'
     required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+  source-path:
+    description: 'The path of the folder to download from Dropbox'
+    required: true
+  dest-path:
+    description: 'The path where the downloaded folder will be placed'
+    required: true
+    default: 'dropbox-artifacts'
 runs:
   using: 'node16'
   main: 'dist/index.js'

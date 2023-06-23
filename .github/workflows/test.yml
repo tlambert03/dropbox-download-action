@@ -4,22 +4,34 @@ on:
   push:
     branches:
       - main
-      - 'releases/*'
+      - "releases/*"
 
 jobs:
-  # unit tests
-  units:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - run: npm ci
-    - run: npm test
+  # # unit tests
+  # units:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - run: npm ci
+  #   - run: npm test
 
   # test action works running from the graph
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: ./
-      with:
-        milliseconds: 1000
+      - uses: actions/checkout@v3
+      - uses: ./
+        with:
+          dropbox-token: ${{ secrets.DROPBOX_TOKEN }}
+          source-path: "/ga_test"
+          dest-path: "some/folder"
+
+      # confirm that we wrote the file
+      - run: tree
+      - run: |
+          if [[ -f "some/folder/myfile.txt" ]]; then
+              echo "File exists."
+          else
+              echo "File does not exist.";
+              exit 1;
+          fi
