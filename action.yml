@@ -1,18 +1,26 @@
-name: 'Download Dropbox Folder'
-description: 'Download data from a dropbox folder'
-branding: 
-  icon: 'download'
+name: "Download Dropbox Folder"
+description: "Download data from a dropbox folder"
+author: "Talley Lambert"
 inputs:
-  dropbox-token:
-    description: 'Dropbox Access Token'
+  dropbox-refresh-token:
+    description: "Dropbox Refresh Token (NOT an access token)"
+    required: true
+  dropbox-app-key:
+    description: "Dropbox App key"
+    required: true
+  dropbox-app-secret:
+    description: "Dropbox App secret"
     required: true
   source-path:
-    description: 'The path of the folder to download from Dropbox'
+    description: "The path of the folder to download from Dropbox"
     required: true
   dest-path:
-    description: 'The path where the downloaded folder will be placed'
-    required: true
-    default: 'dropbox-artifacts'
+    description: "The path where the downloaded folder will be placed"
+    required: false
+    default: "dropbox-artifacts"
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: "node16"
+  main: "dist/index.js"
+branding:
+  icon: "download"
+  color: "blue"

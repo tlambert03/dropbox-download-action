@@ -2,10 +2,14 @@
     "env": {
         "commonjs": true,
         "es6": true,
-        "jest": true,
-        "node": true
+        "node": true,
+        "jest/globals": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:eslint-plugin-jest/recommended",
+        "eslint-config-prettier"
+    ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -13,6 +17,26 @@
     "parserOptions": {
         "ecmaVersion": 2018
     },
+    "plugins": [
+        "eslint-plugin-node",
+        "eslint-plugin-jest"
+    ],
     "rules": {
+        "no-console": "error",
+        "yoda": "error",
+        "prefer-const": [
+            "error",
+            {
+                "destructuring": "all"
+            }
+        ],
+        "no-control-regex": "off",
+        "no-constant-condition": [
+            "error",
+            {
+                "checkLoops": false
+            }
+        ],
+        "node/no-extraneous-import": "error"
     }
 }

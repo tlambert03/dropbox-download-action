@@ -1,24 +1,44 @@
-const wait = require('./src/wait');
-const process = require('process');
-const cp = require('child_process');
-const path = require('path');
+const dbx = require("./src/dbx");
+const process = require("process");
+const fs = require("fs").promises;
+const os = require("os");
+const path = require("path");
 
-test('throws invalid number', async () => {
-  await expect(wait('foo')).rejects.toThrow('milliseconds not a number');
+describe("downloadTestFile", () => {
+  let tempDir;
+
+  beforeEach(async () => {
+    // Create a temporary directory
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "test-"));
+  });
+
+  afterEach(async () => {
+    // Clean up the temporary directory
+    await fs.rm(tempDir, { recursive: true, force: true });
+  });
+
+  it("should download myfile.txt from dropbox", async () => {
+    await dbx.dropboxDownload(
+      "/ga_test",
+      tempDir,
+      process.env.DROPBOX_REFRESH_TOKEN,
+      process.env.DROPBOX_APP_KEY,
+      process.env.DROPBOX_APP_SECRET
+    );
+    const files = await fs.readdir(tempDir);
+
+    // Assert that the file is present in the directory
+    expect(files).toContain("myfile.txt");
+  });
 });
 
-test('wait 500 ms', async () => {
-  const start = new Date();
-  await wait(500);
-  const end = new Date();
-  var delta = Math.abs(end - start);
-  expect(delta).toBeGreaterThanOrEqual(500);
+test("getAccessToken", async () => {
+  const token = await dbx.getAccessToken(
+    process.env.DROPBOX_REFRESH_TOKEN,
+    process.env.DROPBOX_APP_KEY,
+    process.env.DROPBOX_APP_SECRET
+  );
+  // assert token is not null or undefined
+  expect(token).not.toBeNull();
+  expect(token).not.toBeUndefined();
 });
-
-// shows how the runner will run a javascript action with env / stdout protocol
-test('test runs', () => {
-  process.env['INPUT_MILLISECONDS'] = 100;
-  const ip = path.join(__dirname, 'index.js');
-  const result = cp.execSync(`node ${ip}`, {env: process.env}).toString();
-  console.log(result);
-})
