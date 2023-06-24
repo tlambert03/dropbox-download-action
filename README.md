@@ -5,7 +5,9 @@ Use Dropbox API (rather than shared links) to download files from a Dropbox app 
 ## Usage in a workflow
 
 You can now consume the action by referencing the v1 branch.
-Enter the DROPBOX_REFRESH_TOKEN`
+Enter the `DROPBOX_REFRESH_TOKEN`, `DROPBOX_APP_KEY`, and
+`DROPBOX_APP_SECRET` gathered in the "one time setup" process
+described below.
 
 ```yaml
 uses: tlambert03/dropbox-download-action@v1
