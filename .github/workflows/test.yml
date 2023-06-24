@@ -25,7 +25,9 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm test
         env:
-          DROPBOX_TOKEN: ${{ secrets.DROPBOX_TOKEN }}
+          DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
+          DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+          DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
 
   # test action works running from the graph
   test:
@@ -34,7 +36,9 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ./
         with:
-          dropbox-token: ${{ secrets.DROPBOX_TOKEN }}
+          DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
+          DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+          DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
           source-path: "/ga_test"
           dest-path: "some/folder"
 

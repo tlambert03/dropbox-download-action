@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
+    "axios": "^1.4.0",
     "dropbox": "^10.34.0",
     "extract-zip": "^2.0.1"
   },
