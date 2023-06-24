@@ -32,7 +32,7 @@ describe("downloadTestFile", () => {
   });
 });
 
-test("downloadTestFile", async () => {
+test("getAccessToken", async () => {
   const token = await dbx.getAccessToken(
     process.env.DROPBOX_REFRESH_TOKEN,
     process.env.DROPBOX_APP_KEY,
