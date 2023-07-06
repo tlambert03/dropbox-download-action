@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",
-    "@types/node": "^16.11.25",
+    "@types/node": "^20.4.0",
     "@vercel/ncc": "^0.36.1",
     "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.6.0",
